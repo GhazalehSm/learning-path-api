@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { LearningPathsService } from './learning-paths.service';
+import { CreateLearningPathDto } from './dto/create-learning-path.dto';
 
 @Controller('learning-paths')
 export class LearningPathsController {
@@ -8,14 +9,9 @@ export class LearningPathsController {
   @Post()
   create(
     @Body()
-    body: {
-      userId: string;
-      subject: string;
-      title: string;
-      startingLevel?: string;
-    },
+    dto: CreateLearningPathDto,
   ) {
-    return this.learningPathsService.create(body);
+    return this.learningPathsService.create(dto);
   }
 
   @Get(':id')
