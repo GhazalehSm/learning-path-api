@@ -1,11 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 
-import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateLearningPathDto {
-  @IsUUID()
-  userId!: string;
-
   @IsString()
   @IsNotEmpty()
   subject!: string;

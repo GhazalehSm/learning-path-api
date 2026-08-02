@@ -7,6 +7,7 @@ import type { WebSocketLikeConstructor } from '@supabase/realtime-js';
 @Injectable()
 export class SupabaseService implements OnModuleInit {
   private client!: ReturnType<typeof createClient>;
+  private authVerifyClient!: ReturnType<typeof createClient>;
 
   constructor(private configService: ConfigService) {}
 
@@ -23,9 +24,26 @@ export class SupabaseService implements OnModuleInit {
         transport: ws as unknown as WebSocketLikeConstructor,
       },
     });
+
+    // Separate, isolated client used ONLY for verifying user tokens.
+    // Never used for database queries, so it can never contaminate
+    // the service_role client's Authorization header.
+    this.authVerifyClient = createClient(url, key, {
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+      },
+      realtime: {
+        transport: ws as unknown as WebSocketLikeConstructor,
+      },
+    });
   }
 
   getClient() {
     return this.client;
+  }
+
+  getAuthVerifyClient() {
+    return this.authVerifyClient;
   }
 }
