@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { LearningPathsController } from './learning-paths.controller';
 import { LearningPathsService } from './learning-paths.service';
+import { SupabaseAuthGuard } from '../auth/guards/supabase-auth/supabase-auth.guard';
 
 describe('LearningPathsController', () => {
   let controller: LearningPathsController;
@@ -17,7 +18,10 @@ describe('LearningPathsController', () => {
           },
         },
       ],
-    }).compile();
+    })
+      .overrideGuard(SupabaseAuthGuard)
+      .useValue({ canActivate: () => true })
+      .compile();
 
     controller = module.get<LearningPathsController>(LearningPathsController);
   });
