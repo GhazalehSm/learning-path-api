@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { SupabaseService } from '../supabase/supabase.service';
 
 @Injectable()
@@ -8,13 +8,10 @@ export class AuthService {
   async signUp(email: string, password: string) {
     const { data, error } = await this.supabaseService
       .getAuthVerifyClient()
-      .auth.signUp({
-        email,
-        password,
-      });
+      .auth.signUp({ email, password });
 
     if (error) {
-      throw new Error(`Sign up failed: ${error.message}`);
+      throw new UnauthorizedException(`Sign up failed: ${error.message}`);
     }
 
     return data;
@@ -23,13 +20,10 @@ export class AuthService {
   async signIn(email: string, password: string) {
     const { data, error } = await this.supabaseService
       .getAuthVerifyClient()
-      .auth.signInWithPassword({
-        email,
-        password,
-      });
+      .auth.signInWithPassword({ email, password });
 
     if (error) {
-      throw new Error(`Sign in failed: ${error.message}`);
+      throw new UnauthorizedException(error.message);
     }
 
     return data;
