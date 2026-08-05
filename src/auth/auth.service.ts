@@ -28,4 +28,16 @@ export class AuthService {
 
     return data;
   }
+
+  async refresh(refreshToken: string) {
+    const { data, error } = await this.supabaseService
+      .getAuthVerifyClient()
+      .auth.refreshSession({ refresh_token: refreshToken });
+
+    if (error) {
+      throw new UnauthorizedException(error.message);
+    }
+
+    return data;
+  }
 }

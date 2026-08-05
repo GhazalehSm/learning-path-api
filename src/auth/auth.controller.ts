@@ -15,4 +15,9 @@ export class AuthController {
   signIn(@Body() dto: AuthCredentialsDto) {
     return this.authService.signIn(dto.email, dto.password);
   }
+
+  @Post('refresh')
+  refresh(@Body() body: { refreshToken: string }) {
+    return this.authService.refresh(body.refreshToken);
+  }
 }
