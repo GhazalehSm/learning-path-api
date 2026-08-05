@@ -1,25 +1,30 @@
 import { Injectable } from '@nestjs/common';
 import { SupabaseService } from '../supabase/supabase.service';
+import { ClaudeService } from '../claude/claude.service';
 
 interface CreateLearningPathInput {
   userId: string;
   subject: string;
-  title: string;
   startingLevel?: string;
 }
 
 @Injectable()
 export class LearningPathsService {
-  constructor(private supabaseService: SupabaseService) {}
+  constructor(
+    private supabaseService: SupabaseService,
+    private claudeService: ClaudeService,
+  ) {}
 
   async create(input: CreateLearningPathInput) {
+    const title = await this.claudeService.generateTitle(input.subject);
+
     const { data, error } = await this.supabaseService
       .getClient()
       .from('learning_paths')
       .insert({
         user_id: input.userId,
         subject: input.subject,
-        title: input.title,
+        title,
         starting_level: input.startingLevel,
       } as never)
       .select()

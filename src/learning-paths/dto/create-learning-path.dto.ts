@@ -7,10 +7,6 @@ export class CreateLearningPathDto {
   @IsNotEmpty()
   subject!: string;
 
-  @IsString()
-  @IsNotEmpty()
-  title!: string;
-
   @IsOptional()
   @IsString()
   startingLevel?: string;

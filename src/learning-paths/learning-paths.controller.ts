@@ -10,11 +10,7 @@ export class LearningPathsController {
   constructor(private learningPathsService: LearningPathsService) {}
 
   @Post()
-  create(
-    @Body()
-    dto: CreateLearningPathDto,
-    @CurrentUser() user: any,
-  ) {
+  create(@Body() dto: CreateLearningPathDto, @CurrentUser() user: any) {
     return this.learningPathsService.create({ ...dto, userId: user.id });
   }
 
